@@ -1,0 +1,9 @@
+issue,dimension,count_before,pct_before,count_after,pct_after
+Missing/incomplete records (≥1 key field missing),Completeness,6,1.2,11,2.2
+Duplicate records (_id),Consistency,4,0.8,0,0.0
+Inconsistent/invalid date formats (DOB unparseable),Validity,4,0.8,4,0.8
+Inconsistent gender coding,Consistency,2,0.4,0,0.0
+Invalid values: negative credit_history_months,Validity,2,0.4,0,0.0
+Invalid values: negative savings_balance,Validity,1,0.2,0,0.0
+Invalid values: debt_to_income out of range,Validity,1,0.2,0,0.0
+Invalid values: negative annual_income,Validity,0,0.0,0,0.0
