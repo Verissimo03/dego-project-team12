@@ -1,0 +1,54 @@
+{
+  "data_source": "outputs/credit_applications_clean.csv",
+  "n_total_raw_flat": 500,
+  "n_fairness_sample": 500,
+  "n_age_sample": 496,
+  "approval_rate_by_gender": {
+    "female": 0.5059760956175299,
+    "male": 0.659919028340081,
+    "other/unknown": 1.0
+  },
+  "counts_by_gender": [
+    {
+      "gender_norm": "female",
+      "count": 251,
+      "sum": 127
+    },
+    {
+      "gender_norm": "male",
+      "count": 247,
+      "sum": 163
+    },
+    {
+      "gender_norm": "other/unknown",
+      "count": 2,
+      "sum": 2
+    }
+  ],
+  "di_ratio_female_over_male": 0.7667245129909809,
+  "four_fifths_rule_flag": true,
+  "gender_chi_square": {
+    "chi2": 11.505251679308172,
+    "p_value": 0.0006939983289861307,
+    "dof": 1,
+    "n": 498
+  },
+  "gender_cramers_v": 0.1519964309406346,
+  "age_chi_square": {
+    "chi2": 16.622099702367798,
+    "p_value": 0.00527516418924673,
+    "dof": 5,
+    "n": 496,
+    "cramers_v": 0.18306364408869352
+  },
+  "proxy_gender_vs_zipTop": {
+    "p_value": 3.288894798881633e-08,
+    "cramers_v": 0.3615413020821894,
+    "top_k": 15
+  },
+  "proxy_zipTop_vs_approval": {
+    "p_value": 0.09419798874070377,
+    "cramers_v": 0.21278854048179868,
+    "top_k": 15
+  }
+}
