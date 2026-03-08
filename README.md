@@ -28,26 +28,11 @@ Our analysis surfaces **critical governance risks** requiring immediate remediat
 | Tiago Fernandes Cerejo Verissimo | Data Scientist | 72622 |
 | Karl Harfouche | Governance Officer | 70044 |
 
----
+## Video Presentation
 
-## Repository Structure
+📹 **https://youtu.be/4_i2EQQLVMo**
 
-```
-project-team12/
-├── README.md                             ← This file (primary written deliverable)
-├── data/
-│   └── processed/
-│       ├── credit_applications_clean.parquet
-│       └── applications_privacy_safe.csv
-├── notebooks/
-│   ├── 01-data-quality.ipynb             ← Data Engineer (Edoardo)
-│   ├── 02-bias-analysis.ipynb            ← Data Scientist (Tiago)
-│   └── 03_privacy_gdpr_ai_act.ipynb      ← Governance Officer (Karl)
-├── src/
-│   └── fairness_utils.py                 ← Reusable fairness helpers
-└── presentation/                         ← Video link / file
-```
-
+The presentation covers: team introduction, data quality findings, bias analysis results, governance recommendations, and conclusion. 
 ---
 
 ## 1. Data Quality Assessment
@@ -303,14 +288,4 @@ jupyter notebook notebooks/03_privacy_gdpr_ai_act.ipynb
 ```
 
 **Important:** Place `raw_credit_applications.json` in the **repository root** (not inside `notebooks/`) before running. All three notebooks resolve paths relative to the repo root. Notebook 01 must complete first as it produces `outputs/credit_applications_clean.csv`, which notebook 02 loads as its primary input.
-
----
-
-## 7. Video Presentation
-
-📹 **https://youtu.be/4_i2EQQLVMo**
-
-The presentation covers: team introduction, data quality findings, bias analysis results, governance recommendations, and conclusion. 
-
----
 
