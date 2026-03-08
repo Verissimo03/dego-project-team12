@@ -70,7 +70,8 @@ The raw JSON dataset was profiled across four quality dimensions — **completen
 |---|---|---|---|---|---|
 | Missing/incomplete records (≥1 key field missing) | Completeness | 6 | 1.20% | 11 | 2.20% |
 | Duplicate records (`_id`) | Consistency | 4 | 0.80% | 0 | 0.00% ✓ |
-| Inconsistent/invalid date formats (DOB unparseable) | Validity | 4 | 0.80% | 4 | 0.80% |
+| Inconsistent `date_of_birth` formats (ISO, EU `DD/MM`, US `MM/DD` coexist across records) | Consistency | — | dataset-wide | 0 | 0.00% ✓ |
+| Unparseable `date_of_birth` values (cannot be resolved to a valid date) | Validity | 4 | 0.80% | 4 | 0.80% |
 | Inconsistent gender coding | Consistency | 2 | 0.40% | 0 | 0.00% ✓ |
 | Negative `credit_history_months` | Validity | 2 | 0.40% | 0 | 0.00% ✓ |
 | Negative `savings_balance` | Validity | 1 | 0.20% | 0 | 0.00% ✓ |
@@ -79,7 +80,9 @@ The raw JSON dataset was profiled across four quality dimensions — **completen
 
 > **Note on completeness count increase (6 → 11 after cleaning):** Remediation steps that replace invalid values with `NaN` (e.g. negative credit history → `NaN`) expose previously hidden incompleteness in records that appeared complete in the raw data. This is the expected and correct behaviour of transparent nullification — it surfaces real gaps rather than masking them behind impossible values.
 
-> **Note on unparseable DOB (4 records, persistent):** These 4 records contain date strings that could not be resolved even with multi-format parsing (`dayfirst=True`). They remain flagged and are excluded from all age-derived analysis. Remediation of these records requires manual correction at source.
+> **Note on inconsistent date formats (dataset-wide):** The `date_of_birth` field uses at least three coexisting formats across records — ISO (`YYYY-MM-DD`), European (`DD/MM/YYYY`), and US (`MM/DD/YYYY`). The cleaning pipeline handles all three via a multi-format parser with European-first convention (`dayfirst=True`). After parsing, all dates are standardised to `pd.Timestamp` (ISO 8601), resolving the consistency issue.
+
+> **Note on unparseable DOB (4 records, persistent):** These 4 records contain date strings that could not be resolved even with multi-format parsing. They remain flagged and are excluded from all age-derived analysis. Remediation requires manual correction at source.
 
 ### Remediation Steps Applied
 
@@ -267,7 +270,7 @@ NovaCred's credit scoring system qualifies as a **high-risk AI system** under **
 ### Structural Governance Controls
 
 9. **Appoint a model risk officer** responsible for fairness audits, EU AI Act technical documentation, and ongoing DI monitoring.
-11. **Maintain a Records of Processing Activity (RoPA)** under Art. 30 GDPR, covering all operations on credit application data including model training, inference, and analytics.
+10. **Maintain a Records of Processing Activity (RoPA)** under Art. 30 GDPR, covering all operations on credit application data including model training, inference, and analytics.
 
 ---
 
@@ -300,3 +303,14 @@ jupyter notebook notebooks/03_privacy_gdpr_ai_act.ipynb
 ```
 
 **Important:** Place `raw_credit_applications.json` in the **repository root** (not inside `notebooks/`) before running. All three notebooks resolve paths relative to the repo root. Notebook 01 must complete first as it produces `outputs/credit_applications_clean.csv`, which notebook 02 loads as its primary input.
+
+---
+
+## 7. Video Presentation
+
+📹 **[Insert YouTube (unlisted) or Google Drive link here]**
+
+The 6-minute presentation covers: team introduction, data quality findings, bias analysis results, governance recommendations, and conclusion. All team members appear and speak. Key visualisations from the notebooks are shown with specific metrics cited throughout.
+
+---
+
