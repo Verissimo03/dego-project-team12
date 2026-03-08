@@ -308,9 +308,9 @@ jupyter notebook notebooks/03_privacy_gdpr_ai_act.ipynb
 
 ## 7. Video Presentation
 
-📹 **[Insert YouTube (unlisted) or Google Drive link here]**
+📹 **https://youtu.be/4_i2EQQLVMo**
 
-The 6-minute presentation covers: team introduction, data quality findings, bias analysis results, governance recommendations, and conclusion. All team members appear and speak. Key visualisations from the notebooks are shown with specific metrics cited throughout.
+The presentation covers: team introduction, data quality findings, bias analysis results, governance recommendations, and conclusion. 
 
 ---
 
