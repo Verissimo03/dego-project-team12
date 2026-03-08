@@ -33,7 +33,7 @@ Our analysis surfaces **critical governance risks** requiring immediate remediat
 ## Repository Structure
 
 ```
-project-team4/
+project-team12/
 ├── README.md                             ← This file (primary written deliverable)
 ├── data/
 │   └── processed/
@@ -192,9 +192,7 @@ The notebook identifies **7 PII fields** stored without protection across all 50
 | `applicant_info.ip_address` | Online identifier (GDPR Art. 4) | High |
 | `applicant_info.date_of_birth` | Quasi-identifier | Medium |
 | `applicant_info.zip_code` | Quasi-identifier (also proxy variable — see Section 2.4) | Medium–High |
-| `applicant_info.gender` | Protected attribute — special category risk | **High (Art. 9)** |
-
-> **Gender as Art. 9 risk:** Gender is a protected attribute. Its use in a credit decision system creates heightened GDPR Art. 9 and anti-discrimination concerns. The DI = 0.767 finding further elevates the legal exposure. Gender should not be used as a model feature without a valid special-category legal basis.
+| `applicant_info.gender` | Protected attribute — bias risk identified in Section 2 | **High** |
 
 > **`spending_behavior` gap:** The dataset contains granular behavioral transaction data (spending categories and amounts) without documented processing purpose or retention controls. Under Art. 5(1)(c), if this data is not a required model input, its collection must stop.
 
@@ -229,12 +227,11 @@ The privacy-safe dataset retains **20 columns** with all 5 direct identifiers re
 |---|---|---|---|---|
 | Lawful basis | **Gap** | No `consent_timestamp` or processing basis stored per record | Add `consent_timestamp` and `processing_purpose` at ingestion | Art. 6 |
 | Transparency | **Gap** | No evidence of applicant notice or rights disclosure | Implement pre-application data notice and Art. 22 disclosure for automated decisions | Art. 13–14 |
-| Special categories | **Gap** | Gender collected and used without documented Art. 9 basis | Establish valid legal basis or remove gender from model features | Art. 9 |
 | Data minimization | **Partial** | PII pseudonymized in analytics; `spending_behavior` retained without documented purpose | Commission minimization audit; remove unused behavioral data | Art. 5(1)(c) |
 | Accuracy | **Addressed** | Completeness checks and remediation documented with before/after evidence | Maintain pipeline; add source validation at ingestion | Art. 5(1)(d) |
 | Storage limitation | **Gap** | No `retention_until` field; no deletion workflow exists | Define retention schedule; implement automated purge | Art. 5(1)(e) |
 | Right to erasure | **Gap** | No mechanism to locate and delete a subject's records | Implement erasure workflow; ensure hashed IDs support deletion lookup | Art. 17 |
-| Automated decisions | **Gap** | 0% human review; no contestability mechanism for rejected applicants | Implement Art. 22(3) human review queue | Art. 22 |
+| Automated decisions | **Gap** | No audit trail fields, no `human_reviewer_id`, no review timestamp documented in dataset | Implement Art. 22(3) human review queue and contestability mechanism for rejected applicants | Art. 22 |
 | Security | **Partial** | Pseudonymization applied in analytics; RBAC and encryption not evidenced | Enforce RBAC + encryption at rest; add field-access audit logging | Art. 32 |
 | Accountability | **Partial** | Controls documented; no production audit trail | Add `decision_log_id`, `model_version`, `human_reviewer_id` to decision records | Art. 30, Art. 5(2) |
 
@@ -258,11 +255,11 @@ NovaCred's credit scoring system qualifies as a **high-risk AI system** under **
 1. **Suspend ZIP code as a model feature** pending a formal proxy discrimination review. Cramér's V = 0.36 with gender meets the threshold for indirect discrimination risk under EU law.
 2. **Stop storing raw SSNs without encryption.** Apply pseudonymization at the point of ingestion — not post-hoc in analytics pipelines.
 3. **Add consent infrastructure** — record `consent_timestamp`, `processing_purpose`, and lawful basis per application before any processing occurs.
-4. **Implement a GDPR Art. 22(3) human review mechanism.** Currently 0% of decisions have human oversight. Rejected applicants must be able to request and receive human review — this is a critical compliance gap.
+4. **Implement a GDPR Art. 22(3) human review mechanism.** The dataset contains no audit trail fields, no `human_reviewer_id`, and no review timestamp — indicating that no human oversight process is currently documented. Rejected applicants must be able to request and receive human review of automated credit decisions.
 
 ### Medium-Term Controls
 
-5. **Define a retention schedule** with a `retention_until` field per record and an automated deletion workflow. Suggested periods: IP address 90 days; name/email/DOB/gender 5 years; SSN and decision records 7 years; audit logs 10 years.
+5. **Define a retention schedule** with a `retention_until` field per record and an automated deletion workflow. Retention periods should be defined per data category (e.g. operational records, PII, audit logs) in line with applicable financial services regulations and GDPR Art. 5(1)(e).
 6. **Introduce a decision audit log** capturing: `decision_log_id`, `model_version`, `decision_reason_codes`, `human_reviewer_id`, and `review_timestamp` for every application outcome.
 7. **Run DI monitoring quarterly** — automate the DI ratio calculation on production decisions and trigger a governance review when DI drops below 0.85 (buffer above the 0.8 regulatory threshold).
 8. **Commission a data minimization audit** on `spending_behavior` — if spending categories are not model inputs, their collection must stop under Art. 5(1)(c).
@@ -270,8 +267,7 @@ NovaCred's credit scoring system qualifies as a **high-risk AI system** under **
 ### Structural Governance Controls
 
 9. **Appoint a model risk officer** responsible for fairness audits, EU AI Act technical documentation, and ongoing DI monitoring.
-10. **Maintain a Records of Processing Activity (RoPA)** under Art. 30 GDPR, covering all operations on credit application data.
-11. **Formalize a DPIA** (Art. 35) before any production deployment, given the high-risk AI classification and the fully automated decision-making exposure under Art. 22.
+11. **Maintain a Records of Processing Activity (RoPA)** under Art. 30 GDPR, covering all operations on credit application data including model training, inference, and analytics.
 
 ---
 
@@ -304,7 +300,3 @@ jupyter notebook notebooks/03_privacy_gdpr_ai_act.ipynb
 ```
 
 **Important:** Place `raw_credit_applications.json` in the **repository root** (not inside `notebooks/`) before running. All three notebooks resolve paths relative to the repo root. Notebook 01 must complete first as it produces `outputs/credit_applications_clean.csv`, which notebook 02 loads as its primary input.
-
----
-
-*Version 1.0 · DEGO 2606 · Nova SBE · Team 4*
